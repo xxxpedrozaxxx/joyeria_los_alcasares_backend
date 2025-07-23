@@ -1,9 +1,6 @@
 import { Repository } from 'typeorm';
-
-
-
-import { CreateProductoDto, UpdateProductoDto } from '../dtos/productos/create-producto.dto';
-
+import { CreateProductoDto } from '../dtos/productos/create-producto.dto';
+import { UpdateProductoDto } from '../dtos/productos/update-producto.dto';
 import { AppDataSource } from '../config/data-source';
 import { Producto } from '../entities/producto.entity';
 import { Categoria } from '../entities/categoria.entity';
@@ -22,14 +19,13 @@ export class ProductoService {
     }
 
     async findAll(): Promise<Producto[]> {
-        // Usamos 'relations' para traer los datos de la categoría y el proveedor
         return this.productoRepository.find({ relations: ['categoria', 'proveedor'] });
     }
 
     async findById(id: string): Promise<Producto> {
         const producto = await this.productoRepository.findOne({
             where: { id },
-            relations: ['categoria', 'proveedor', 'productoMateriales.material'], // Trae también los materiales
+            relations: ['categoria', 'proveedor', 'productoMateriales.material'],
         });
 
         if (!producto) {
@@ -39,40 +35,43 @@ export class ProductoService {
     }
 
     async create(data: CreateProductoDto): Promise<Producto> {
-        // 1. Verificar que las entidades relacionadas (categoría y proveedor) existen
-        const categoria = await this.categoriaRepository.findOneBy({ id: data.categoriaId });
+        const categoria = await this.categoriaRepository.findOne({ where: { id: data.categoriaId } });
         if (!categoria) throw new NotFoundException('La categoría especificada no existe.');
 
-        const proveedor = await this.proveedorRepository.findOneBy({ id: data.proveedorId });
+        const proveedor = await this.proveedorRepository.findOne({ where: { id: data.proveedorId } });
         if (!proveedor) throw new NotFoundException('El proveedor especificado no existe.');
 
-        // 2. Crear la nueva instancia de producto
-        const nuevoProducto = this.productoRepository.create({
+        const productoData: Partial<Producto> = {
             ...data,
-            categoria: categoria, // Asignamos la entidad completa
-            proveedor: proveedor, // Asignamos la entidad completa
-        });
+            imageUrl: data.imageUrl ?? '',
+            topSale: data.topSale ?? false,
+            categoria,
+            proveedor,
+            categoriaId: data.categoriaId,
+            proveedorId: data.proveedorId,
+        };
 
+        const nuevoProducto = this.productoRepository.create(productoData);
         return this.productoRepository.save(nuevoProducto);
     }
     
     async update(id: string, data: UpdateProductoDto): Promise<Producto> {
         const producto = await this.findById(id);
         
-        // Si se provee un nuevo ID de categoría o proveedor, hay que buscarlos
         if (data.categoriaId) {
-            const categoria = await this.categoriaRepository.findOneBy({ id: data.categoriaId });
+            const categoria = await this.categoriaRepository.findOne({ where: { id: data.categoriaId } });
             if (!categoria) throw new NotFoundException('La nueva categoría no existe.');
             producto.categoria = categoria;
+            producto.categoriaId = data.categoriaId;
         }
 
         if (data.proveedorId) {
-            const proveedor = await this.proveedorRepository.findOneBy({ id: data.proveedorId });
+            const proveedor = await this.proveedorRepository.findOne({ where: { id: data.proveedorId } });
             if (!proveedor) throw new NotFoundException('El nuevo proveedor no existe.');
             producto.proveedor = proveedor;
+            producto.proveedorId = data.proveedorId;
         }
         
-        // Eliminamos los IDs del DTO para que no intenten sobrescribir las relaciones ya cargadas
         const { categoriaId, proveedorId, ...restOfData } = data;
 
         this.productoRepository.merge(producto, restOfData);

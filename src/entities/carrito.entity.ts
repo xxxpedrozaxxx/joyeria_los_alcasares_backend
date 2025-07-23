@@ -1,6 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, OneToOne, JoinColumn, OneToMany } from "typeorm";
 import { Usuario } from "./usuario.entity";
-import { ItemsCarrito } from "./item-carrito.entity";
+import { ItemCarrito } from "./item-carrito.entity";
 
 @Entity('carritos')
 export class Carrito {
@@ -18,6 +18,6 @@ export class Carrito {
     @JoinColumn({ name: 'usuario_id' })
     usuario!: Usuario;
     
-    @OneToMany(() => ItemsCarrito, (item) => item.carrito, { cascade: true })
-    items!: ItemsCarrito[];
+    @OneToMany(() => ItemCarrito, (item) => item.carrito, { cascade: true })
+    items!: ItemCarrito[];
 }

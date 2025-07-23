@@ -14,7 +14,7 @@ import { ProductoMaterial } from "../entities/producto-material.entity";
 import { Producto } from "../entities/producto.entity";
 import { Proveedor } from "../entities/proveedor.entity";
 import { Resena } from "../entities/resena.entity";
-import { ItemsCarrito } from "../entities/item-carrito.entity";
+import { ItemCarrito } from "../entities/item-carrito.entity";
 
 // Carga las variables de entorno desde el archivo .env
 config();
@@ -35,7 +35,7 @@ const dataSourceOptions: DataSourceOptions = {
         Departamento,
         DetallePedido,
         Direccion,
-        ItemsCarrito,
+        ItemCarrito,
         Material,
         Municipio,
         Pedido,

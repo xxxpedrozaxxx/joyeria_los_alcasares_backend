@@ -4,7 +4,7 @@ import { Producto } from "./producto.entity";
 
 @Entity('items_carrito')
 @Index('idx_carrito_producto_unico', ['carrito', 'producto'], { unique: true })
-export class ItemsCarrito {
+export class ItemCarrito {
     @PrimaryGeneratedColumn('uuid')
     id!: string;
 

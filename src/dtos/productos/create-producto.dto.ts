@@ -1,4 +1,4 @@
-import { IsString, IsNumber, Min, IsNotEmpty, IsInt, IsUUID, IsOptional } from 'class-validator';
+import { IsString, IsNumber, Min, IsNotEmpty, IsInt, IsOptional, IsBoolean } from 'class-validator';
 
 export class CreateProductoDto {
     @IsNotEmpty({ message: 'El nombre es requerido.' })
@@ -25,7 +25,11 @@ export class CreateProductoDto {
     
     @IsOptional()
     @IsString()
-    imagenUrl?: string;
+    imageUrl?: string;
+
+    @IsOptional()
+    @IsBoolean()
+    topSale?: boolean;
     
     @IsNotEmpty({ message: 'El ID de la categoría es requerido.' })
     @IsInt()
@@ -34,16 +38,4 @@ export class CreateProductoDto {
     @IsNotEmpty({ message: 'El ID del proveedor es requerido.' })
     @IsInt()
     proveedorId!: number;
-}
-
-// Para actualizar, usualmente los campos son opcionales
-export class UpdateProductoDto {
-    @IsOptional() @IsString() nombre?: string;
-    @IsOptional() @IsString() descripcion?: string;
-    @IsOptional() @IsNumber() @Min(0.01) precio?: number;
-    @IsOptional() @IsString() garantia?: string;
-    @IsOptional() @IsInt() @Min(0) stock?: number;
-    @IsOptional() @IsString() imagenUrl?: string;
-    @IsOptional() @IsInt() categoriaId?: number;
-    @IsOptional() @IsInt() proveedorId?: number;
 }

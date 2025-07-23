@@ -35,6 +35,14 @@ const controller = new ProductoController();
  *                 type: string
  *               precio:
  *                 type: number
+ *               garantia:
+ *                 type: string
+ *               stock:
+ *                 type: integer
+ *               imageUrl:
+ *                 type: string
+ *               topSale:
+ *                 type: boolean
  *               categoriaId:
  *                 type: string
  *               proveedorId:
@@ -82,6 +90,14 @@ const controller = new ProductoController();
  *                 type: string
  *               precio:
  *                 type: number
+ *               garantia:
+ *                 type: string
+ *               stock:
+ *                 type: integer
+ *               imageUrl:
+ *                 type: string
+ *               topSale:
+ *                 type: boolean
  *     responses:
  *       200:
  *         description: Producto actualizado

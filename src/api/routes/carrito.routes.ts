@@ -6,16 +6,74 @@ const router = Router();
 
 /**
  * @openapi
- * /api/carritos:
+ * /api/carritos/usuario/{usuarioId}:
  *   get:
- *     summary: Obtener todos los carritos
+ *     summary: Obtener o crear un carrito para un usuario
  *     tags:
  *       - Carritos
+ *     parameters:
+ *       - in: path
+ *         name: usuarioId
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: ID del usuario
  *     responses:
  *       200:
- *         description: Lista de carritos
+ *         description: Carrito del usuario
+ *
+ * /api/carritos/{carritoId}/items:
  *   post:
- *     summary: Crear un carrito
+ *     summary: Agregar un producto al carrito
+ *     tags:
+ *       - Carritos
+ *     parameters:
+ *       - in: path
+ *         name: carritoId
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: ID del carrito
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               productoId:
+ *                 type: string
+ *               cantidad:
+ *                 type: number
+ *     responses:
+ *       200:
+ *         description: Carrito actualizado
+ *
+ * /api/carritos/{carritoId}/items/{itemId}:
+ *   delete:
+ *     summary: Eliminar un producto del carrito
+ *     tags:
+ *       - Carritos
+ *     parameters:
+ *       - in: path
+ *         name: carritoId
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: ID del carrito
+ *       - in: path
+ *         name: itemId
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: ID del item del carrito
+ *     responses:
+ *       200:
+ *         description: Carrito actualizado
+ *
+ * /api/carritos:
+ *   post:
+ *     summary: Crear un carrito (legacy)
  *     tags:
  *       - Carritos
  *     requestBody:
@@ -32,45 +90,8 @@ const router = Router();
  *         description: Carrito creado
  *
  * /api/carritos/{id}:
- *   get:
- *     summary: Obtener carrito por ID
- *     tags:
- *       - Carritos
- *     parameters:
- *       - in: path
- *         name: id
- *         schema:
- *           type: string
- *         required: true
- *         description: ID del carrito
- *     responses:
- *       200:
- *         description: Carrito encontrado
- *   patch:
- *     summary: Actualizar carrito
- *     tags:
- *       - Carritos
- *     parameters:
- *       - in: path
- *         name: id
- *         schema:
- *           type: string
- *         required: true
- *         description: ID del carrito
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               usuarioId:
- *                 type: string
- *     responses:
- *       200:
- *         description: Carrito actualizado
  *   delete:
- *     summary: Eliminar carrito
+ *     summary: Eliminar carrito (legacy)
  *     tags:
  *       - Carritos
  *     parameters:
@@ -81,14 +102,14 @@ const router = Router();
  *         required: true
  *         description: ID del carrito
  *     responses:
- *       200:
+ *       204:
  *         description: Carrito eliminado
  */
 
-router.get('/', controller.getAll);
-router.get('/:id', controller.getById);
+router.get('/usuario/:usuarioId', controller.getByUsuarioId);
+router.post('/:carritoId/items', controller.addItemToCarrito);
+router.delete('/:carritoId/items/:itemId', controller.removeItemFromCarrito);
 router.post('/', controller.create);
-router.patch('/:id', controller.update);
 router.delete('/:id', controller.remove);
 
 export const CarritoRouter = router;

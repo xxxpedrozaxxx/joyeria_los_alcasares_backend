@@ -6,19 +6,31 @@ import { UpdateCarritoDto } from '../../dtos/carrito/update-carrito.dto';
 export class CarritoController {
     private readonly carritoService = new CarritoService();
 
-    public getAll = async (req: Request, res: Response, next: NextFunction) => {
+    public getByUsuarioId = async (req: Request, res: Response, next: NextFunction) => {
         try {
-            const carritos = await this.carritoService.findAll();
-            res.status(200).json(carritos);
+            const { usuarioId } = req.params;
+            const carrito = await this.carritoService.findOrCreateByUsuarioId(usuarioId);
+            res.status(200).json(carrito);
         } catch (error) {
             next(error);
         }
     };
 
-    public getById = async (req: Request, res: Response, next: NextFunction) => {
+    public addItemToCarrito = async (req: Request, res: Response, next: NextFunction) => {
         try {
-            const { id } = req.params;
-            const carrito = await this.carritoService.findById(id);
+            const { carritoId } = req.params;
+            const { productoId, cantidad } = req.body;
+            const carrito = await this.carritoService.addItem(carritoId, productoId, cantidad);
+            res.status(200).json(carrito);
+        } catch (error) {
+            next(error);
+        }
+    };
+
+    public removeItemFromCarrito = async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            const { carritoId, itemId } = req.params;
+            const carrito = await this.carritoService.removeItem(carritoId, itemId);
             res.status(200).json(carrito);
         } catch (error) {
             next(error);
@@ -30,17 +42,6 @@ export class CarritoController {
             const carritoData: CreateCarritoDto = req.body;
             const nuevoCarrito = await this.carritoService.create(carritoData);
             res.status(201).json(nuevoCarrito);
-        } catch (error) {
-            next(error);
-        }
-    };
-
-    public update = async (req: Request, res: Response, next: NextFunction) => {
-        try {
-            const { id } = req.params;
-            const carritoData: UpdateCarritoDto = req.body;
-            const carritoActualizado = await this.carritoService.update(id, carritoData);
-            res.status(200).json(carritoActualizado);
         } catch (error) {
             next(error);
         }
