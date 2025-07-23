@@ -1,3 +1,4 @@
+import { Contacto } from "../entities/contacto.entity";
 import "reflect-metadata";
 import { DataSource, DataSourceOptions } from "typeorm";
 import { config } from "dotenv";
@@ -15,6 +16,7 @@ import { Producto } from "../entities/producto.entity";
 import { Proveedor } from "../entities/proveedor.entity";
 import { Resena } from "../entities/resena.entity";
 import { ItemCarrito } from "../entities/item-carrito.entity";
+import { Newslatter } from "../entities/newslatter.entity";
 
 // Carga las variables de entorno desde el archivo .env
 config();
@@ -44,6 +46,8 @@ const dataSourceOptions: DataSourceOptions = {
         Proveedor,
         Resena,
         Usuario,
+        Newslatter,
+        Contacto,
     ],
     migrations: [],
     subscribers: [],

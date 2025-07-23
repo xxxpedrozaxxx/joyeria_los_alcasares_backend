@@ -1,3 +1,5 @@
+
+
 import dotenv from 'dotenv';
 import express, { Application } from 'express';
 import { AppDataSource } from './config/data-source';
@@ -18,6 +20,13 @@ export const startServer = async () => {
     app.use(cors()); // Habilita CORS
     app.use(express.json()); // Permite leer req.body en JSON
     // Documentación OpenAPI
+    
+    const { ContactoRouter } = require('./api/routes/contacto.routes');
+    app.use('/api/contacto', ContactoRouter);
+  // ...existing code...
+    // Rutas principales
+    const { NewslatterRouter } = require('./api/routes/newslatter.routes');
+    app.use('/api/newslatter', NewslatterRouter);
     app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
     // Rutas principales
     app.use('/api/productos', ProductoRouter);
