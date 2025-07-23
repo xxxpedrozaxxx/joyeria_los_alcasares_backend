@@ -1,15 +1,15 @@
-import { IsNotEmpty, IsNumber, IsEnum } from 'class-validator';
-import { EstadoPedido } from '../../entities/enums/estado-pedido.enum';
+import { IsNotEmpty, IsNumber } from 'class-validator';
 
 export class CreatePedidoDto {
     @IsNotEmpty()
     usuarioId!: string;
 
     @IsNotEmpty()
-    direccionEnvioId!: string;
+    direccionEnvio!: string;
 
-    @IsEnum(EstadoPedido)
-    estado!: EstadoPedido;
+
+    @IsNotEmpty()
+    carritoId!: string;
 
     @IsNumber()
     total!: number;

@@ -23,8 +23,6 @@ export const startServer = async () => {
     
     const { ContactoRouter } = require('./api/routes/contacto.routes');
     app.use('/api/contacto', ContactoRouter);
-  // ...existing code...
-    // Rutas principales
     const { NewslatterRouter } = require('./api/routes/newslatter.routes');
     app.use('/api/newslatter', NewslatterRouter);
     app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));

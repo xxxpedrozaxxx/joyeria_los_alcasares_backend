@@ -34,9 +34,8 @@ export class Pedido {
     @JoinColumn({ name: 'usuario_id' })
     usuario!: Usuario;
     
-    @ManyToOne(() => Direccion, { nullable: false, eager: true }) // eager: true para cargar la dirección siempre con el pedido
-    @JoinColumn({ name: 'direccion_id' })
-    direccionEnvio!: Direccion;
+    @Column({ name: 'direccion_envio', type: 'varchar', length: 255, nullable: false })
+    direccionEnvio!: string;
 
     @OneToMany(() => DetallePedido, (detalle) => detalle.pedido, { cascade: true })
     detalles!: DetallePedido[];

@@ -27,9 +27,12 @@ const router = Router();
  *             properties:
  *               usuarioId:
  *                 type: string
- *               fecha:
+ *               direccionEnvio:
  *                 type: string
- *                 format: date-time
+ *               carritoId:
+ *                 type: string
+ *               total:
+ *                 type: number
  *     responses:
  *       201:
  *         description: Pedido creado
